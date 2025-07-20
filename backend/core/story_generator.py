@@ -8,6 +8,8 @@ from core.prompts import STORY_PROMPT
 from core.models import StoryLLMResponse, StoryNodeLLM
 from models.story import Story, StoryNode
 
+import os
+
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -15,8 +17,17 @@ class StoryGenerator:
     @classmethod
     # private method to get the LLM instance
     def _get_llm(cls):
+        # sample Python code snippet
+        openai_api_key = os.getenv("CHOREO_OPENAI_CONNECTION_OPENAI_API_KEY")
+        serviceurl = os.getenv("CHOREO_OPENAI_CONNECTION_SERVICEURL")
+        if openai_api_key and serviceurl:
+            return ChatOpenAI(
+                model="gpt-4o-mini",
+                api_key=openai_api_key,
+                base_url=serviceurl
+            )
         return ChatOpenAI(
-            model="gpt-4-turbo"
+            model="gpt-4o-mini"
         )
     @classmethod
     def generate_story(cls, db: Session, session_id: str, theme: str ="fantasy" ) -> Story:
